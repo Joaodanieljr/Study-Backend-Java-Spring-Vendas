@@ -1,7 +1,8 @@
-package application;
+package com.joaodanieljr.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,12 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@ComponentScan // utilizado para dizer quais pacotes o spring deve escanear.
+@ComponentScan(basePackages = "com.joaodanieljr") // utilizado para dizer quais pacotes o spring deve escanear.
 @RestController
 public class VendasApplication {
 	
-	@Autowired
-	@Qualifier("applicationName")
+	//@Autowired
+	//@Qualifier("applicationName")
+	@Value("${application.name}") // ler do application.properties
 	private String applicationName;
 	
 	@GetMapping("hello")
