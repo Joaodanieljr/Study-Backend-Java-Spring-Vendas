@@ -10,7 +10,16 @@ public class Pedido {
 	private LocalDate dataPedido;
 	private BigDecimal total;
 	
-	
+	public Pedido() {
+	}
+	public Pedido(Integer id, Cliente cliente, LocalDate dataPedido,
+			BigDecimal total) {
+		super();
+		this.id = id;
+		this.cliente = cliente;
+		this.dataPedido = dataPedido;
+		this.total = total;
+	}
 	public Integer getId() {
 		return id;
 	}
