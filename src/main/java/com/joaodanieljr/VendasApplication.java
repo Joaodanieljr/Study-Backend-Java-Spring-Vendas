@@ -19,11 +19,32 @@ public class VendasApplication {
 	public CommandLineRunner init(@Autowired Clientes clientes){
 		return args-> {
 			clientes.salvar(new Cliente("Joao"));
-			clientes.salvar(new Cliente("Joao2"));
+			clientes.salvar(new Cliente("daniel"));
+			clientes.salvar(new Cliente("pereira"));
+			clientes.salvar(new Cliente("junior"));
 			
 			List<Cliente> todosClientes = clientes.obterTodos();
+			System.out.println("Busca todos os clientes");
 			todosClientes.forEach(System.out::println);
+			
+			todosClientes.forEach(cliente ->{
+				cliente.setNome(cliente.getNome() + " Atualizado");
+				clientes.atualizar(cliente);
+			});
+			
+			System.out.println("Busca todos os clientes atualizados");
+			todosClientes = clientes.obterTodos();
+			todosClientes.forEach(System.out::println);
+			
+			System.out.println("Busca todos os clientes apos delete");
+			clientes.deletar(1);
+			todosClientes = clientes.obterTodos();
+			todosClientes.forEach(System.out::println);
+			
+			System.out.println("Busca todos os clientes que contem JUN");
+			clientes.buscarNome("jun").forEach(System.out::println);
 		};
+
 	}
 	
 	public static void main(String[] args) {
