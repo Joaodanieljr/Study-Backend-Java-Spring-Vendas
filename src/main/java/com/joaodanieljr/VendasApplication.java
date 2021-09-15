@@ -1,8 +1,13 @@
 package com.joaodanieljr;
 
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
+import com.joaodanieljr.domain.entity.Pedido;
+import com.joaodanieljr.domain.repository.Pedidos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,41 +15,31 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.joaodanieljr.domain.entity.Cliente;
-import com.joaodanieljr.domain.repositorio.Clientes;
+import com.joaodanieljr.domain.repository.Clientes;
 
 @SpringBootApplication
 public class VendasApplication {
 
 	@Bean
-	public CommandLineRunner init(@Autowired Clientes clientes){
+	public CommandLineRunner init(
+			@Autowired Clientes clientes,
+			@Autowired Pedidos pedidos){
 		return args-> {
-			clientes.salvar(new Cliente("Joao"));
-			clientes.salvar(new Cliente("daniel"));
-			clientes.salvar(new Cliente("pereira"));
-			clientes.salvar(new Cliente("junior"));
-			
-			List<Cliente> todosClientes = clientes.obterTodos();
-			System.out.println("Busca todos os clientes");
-			todosClientes.forEach(System.out::println);
-			
-			todosClientes.forEach(cliente ->{
-				cliente.setNome(cliente.getNome() + " Atualizado");
-				clientes.atualizar(cliente);
-			});
-			
-			System.out.println("Busca todos os clientes atualizados");
-			todosClientes = clientes.obterTodos();
-			todosClientes.forEach(System.out::println);
-			
-			System.out.println("Busca todos os clientes apos delete");
-			clientes.deletar(1);
-			todosClientes = clientes.obterTodos();
-			todosClientes.forEach(System.out::println);
-			
-			System.out.println("Busca todos os clientes que contem JUN");
-			clientes.buscarNome("jun").forEach(System.out::println);
-		};
+			Cliente joao = new Cliente("Joao");
+			clientes.save(joao);
 
+			Pedido p_1 = new Pedido();
+			p_1.setCliente(joao);
+			p_1.setDataPedido(LocalDate.now());
+			p_1.setTotal(BigDecimal.valueOf(100));
+			pedidos.save(p_1);
+
+			/*Cliente cliente = clientes.findClienteFetchPedidos(joao.getId());
+			System.out.println(cliente);
+			System.out.println(cliente.getPedidos());*/
+
+			pedidos.findByCliente(joao).forEach(System.out::println);
+		};
 	}
 	
 	public static void main(String[] args) {

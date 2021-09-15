@@ -1,11 +1,7 @@
 package com.joaodanieljr.domain.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name= "cliente") //SOMENTE QUANDO O NOME DA TABELA É DIFERENTE DA ENTIDADE
@@ -18,7 +14,10 @@ public class Cliente {
 	
 	@Column(name = "nome", length = 100)
 	private String nome;
-	
+
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+	private Set<Pedido> pedidos;
+
 	public Cliente() {
 	}
 
@@ -43,6 +42,8 @@ public class Cliente {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	public Set<Pedido> getPedidos() {return pedidos;}
+	public void setPedidos(Set<Pedido> pedidos) {this.pedidos = pedidos;}
 
 	@Override
 	public String toString() {
