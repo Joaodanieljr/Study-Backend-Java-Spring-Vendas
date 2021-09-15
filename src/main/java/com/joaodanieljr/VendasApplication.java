@@ -22,23 +22,10 @@ public class VendasApplication {
 
 	@Bean
 	public CommandLineRunner init(
-			@Autowired Clientes clientes,
-			@Autowired Pedidos pedidos){
+			@Autowired Clientes clientes){
 		return args-> {
 			Cliente joao = new Cliente("Joao");
 			clientes.save(joao);
-
-			Pedido p_1 = new Pedido();
-			p_1.setCliente(joao);
-			p_1.setDataPedido(LocalDate.now());
-			p_1.setTotal(BigDecimal.valueOf(100));
-			pedidos.save(p_1);
-
-			/*Cliente cliente = clientes.findClienteFetchPedidos(joao.getId());
-			System.out.println(cliente);
-			System.out.println(cliente.getPedidos());*/
-
-			pedidos.findByCliente(joao).forEach(System.out::println);
 		};
 	}
 	
