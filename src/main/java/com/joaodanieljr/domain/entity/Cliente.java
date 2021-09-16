@@ -1,12 +1,18 @@
 package com.joaodanieljr.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name= "cliente") //SOMENTE QUANDO O NOME DA TABELA É DIFERENTE DA ENTIDADE
+@Getter
+@Setter
+@ToString
 public class Cliente {
 
 	@Id
@@ -32,26 +38,5 @@ public class Cliente {
 		this.id = id;
 		this.nome = nome;
 	}
-
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public Set<Pedido> getPedidos() {return pedidos;}
-	public void setPedidos(Set<Pedido> pedidos) {this.pedidos = pedidos;}
-
-	@Override
-	public String toString() {
-		return "Cliente [id = " + id + ", nome = " + nome + "]";
-	}
-	
 	
 }
