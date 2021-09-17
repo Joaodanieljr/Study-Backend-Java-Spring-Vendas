@@ -4,12 +4,14 @@ import com.joaodanieljr.domain.entity.Cliente;
 import com.joaodanieljr.domain.entity.ItemPedido;
 import com.joaodanieljr.domain.entity.Pedido;
 import com.joaodanieljr.domain.entity.Produto;
+import com.joaodanieljr.domain.enums.StatusPedido;
 import com.joaodanieljr.domain.repository.Clientes;
 import com.joaodanieljr.domain.repository.Itens;
 import com.joaodanieljr.domain.repository.Pedidos;
 import com.joaodanieljr.domain.repository.Produtos;
 import com.joaodanieljr.dto.ItensPedidoDTO;
 import com.joaodanieljr.dto.PedidoDTO;
+import com.joaodanieljr.exceptions.PedidoNaoEncontradoException;
 import com.joaodanieljr.exceptions.RegraNegocioException;
 import com.joaodanieljr.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,12 +51,27 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setDataPedido(LocalDate.now());
         pedido.setTotal(dto.getTotal());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itensPedido =  converterItens(pedido, dto.getItens());
         pedidosRepository.save(pedido);
         itensPedidoRepository.saveAll(itensPedido);
         pedido.setItens(itensPedido);
         return pedido;
+    }
+
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return pedidosRepository.findByIdFetchItens(id);
+    }
+
+    @Override
+    @Transactional
+    public void atualizaStatus(Integer id, StatusPedido statusPedido) {
+        pedidosRepository.findById(id).map(p -> {
+            p.setStatus(statusPedido);
+            return pedidosRepository.save(p);
+        }).orElseThrow(()-> new PedidoNaoEncontradoException("Pedido nao encontrado"));
     }
 
     private List<ItemPedido> converterItens(Pedido pedido, List<ItensPedidoDTO> itens){
