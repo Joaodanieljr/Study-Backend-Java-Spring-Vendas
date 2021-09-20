@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity
@@ -21,6 +23,7 @@ public class Cliente {
 	private Integer id;
 	
 	@Column(name = "nome", length = 100)
+	@NotBlank(message = "{campo.nome.obrigatorio}")
 	private String nome;
 
 	@JsonIgnore
