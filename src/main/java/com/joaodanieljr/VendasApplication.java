@@ -19,15 +19,6 @@ import com.joaodanieljr.domain.repository.Clientes;
 
 @SpringBootApplication
 public class VendasApplication {
-
-	@Bean
-	public CommandLineRunner init(
-			@Autowired Clientes clientes){
-		return args-> {
-			Cliente joao = new Cliente("Joao");
-			clientes.save(joao);
-		};
-	}
 	
 	public static void main(String[] args) {
 
